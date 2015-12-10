@@ -24,4 +24,3 @@ if __name__ == '__main__':
         i = 'input.txt'
     size = load_and_calculate_packages(i)
     print(size)
-
