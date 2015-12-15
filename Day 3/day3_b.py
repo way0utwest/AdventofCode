@@ -1,39 +1,49 @@
 import sys
 
 def house_count(directions):
-    deliveries = {(0,0):1}
+    santadeliveries = {(0,0):1}
     x = 0
     y = 0
+    sx = 0
+    sy = 0
+    rx = 0
+    ry = 0
+    who = 's'
     for direction in directions:
         if direction == '>':
-            x += 1
-            if (x,y) in deliveries:
-                current = deliveries[(x,y)]
-                deliveries[(x,y)] = current + 1
+            if who == 's':
+                sx += 1
             else:
-                deliveries[(x,y)] = 1
+                rx += 1
         if direction == '<':
-            x -= 1
-            if (x,y) in deliveries:
-                current = deliveries[(x,y)]
-                deliveries[(x,y)] = current + 1
+            if who == 's':
+                sx -= 1
             else:
-                deliveries[(x,y)] = 1
+                rx -= 1
         if direction == '^':
-            y += 1
-            if (x,y) in deliveries:
-                current = deliveries[(x,y)]
-                deliveries[(x,y)] = current + 1
+            if who == 's':
+                sy += 1
             else:
-                deliveries[(x,y)] = 1
+                ry += 1
         if direction == 'v':
-            y -= 1
-            if (x,y) in deliveries:
-                current = deliveries[(x,y)]
-                deliveries[(x,y)] = current + 1
+            if who == 's':
+                sy -= 1
             else:
-                deliveries[(x,y)] = 1
-    print(str(len(deliveries)))
+                ry -= 1
+        if who == 's':
+            x, y = sx, sy
+            who = 'r'
+        else:
+            who = 's'
+            x, y = rx, ry
+
+        if (x,y) in santadeliveries:
+            current = santadeliveries[(x,y)]
+            santadeliveries[(x,y)] = current + 1
+        else:
+            santadeliveries[(x,y)] = 1
+
+    print(str(len(santadeliveries)))
 
     return
 
