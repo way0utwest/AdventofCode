@@ -309,7 +309,6 @@ cf LSHIFT 1 -> cz
 as RSHIFT 3 -> au
 cz OR cy -> da
 kw AND ky -> kz
-lx -> a
 iw AND ix -> iz
 lr AND lt -> lu
 jp RSHIFT 5 -> js
@@ -337,3 +336,4 @@ o AND q -> r
 NOT p -> q
 k AND m -> n
 as RSHIFT 2 -> at
+lx -> a
