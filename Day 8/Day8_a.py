@@ -1,7 +1,7 @@
 import sys
 
 def count_char(string):
-    return 1
+    return len(string) - 1
 
 filename = "input.txt"
 literals = 0
