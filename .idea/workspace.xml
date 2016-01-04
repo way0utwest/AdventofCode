@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="18d5b5e3-8884-4de5-bec7-3c9d724b265a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="18d5b5e3-8884-4de5-bec7-3c9d724b265a" name="Default" comment="" />
     <ignored path="AdventofCode.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -26,8 +24,8 @@
       <file leaf-file-name="day1.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Day 1 - Santas directions/day1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.41653904">
-              <caret line="16" column="7009" selection-start-line="16" selection-start-column="9" selection-end-line="16" selection-end-column="7009" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -586,8 +584,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Day 1 - Santas directions/day1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.41653904">
-          <caret line="16" column="7009" selection-start-line="16" selection-start-column="9" selection-end-line="16" selection-end-column="7009" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
