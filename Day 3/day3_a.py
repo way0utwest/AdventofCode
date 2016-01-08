@@ -7,32 +7,17 @@ def house_count(directions):
     for direction in directions:
         if direction == '>':
             x += 1
-            if (x,y) in deliveries:
-                current = deliveries[(x,y)]
-                deliveries[(x,y)] = current + 1
-            else:
-                deliveries[(x,y)] = 1
         if direction == '<':
             x -= 1
-            if (x,y) in deliveries:
-                current = deliveries[(x,y)]
-                deliveries[(x,y)] = current + 1
-            else:
-                deliveries[(x,y)] = 1
         if direction == '^':
             y += 1
-            if (x,y) in deliveries:
-                current = deliveries[(x,y)]
-                deliveries[(x,y)] = current + 1
-            else:
-                deliveries[(x,y)] = 1
         if direction == 'v':
             y -= 1
-            if (x,y) in deliveries:
-                current = deliveries[(x,y)]
-                deliveries[(x,y)] = current + 1
-            else:
-                deliveries[(x,y)] = 1
+        if (x,y) in deliveries:
+            current = deliveries[(x,y)]
+            deliveries[(x,y)] = current + 1
+        else:
+            deliveries[(x,y)] = 1
     print(str(len(deliveries)))
 
     return
