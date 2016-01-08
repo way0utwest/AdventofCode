@@ -168,7 +168,6 @@ fo RSHIFT 1 -> gh
 NOT gw -> gx
 NOT gb -> gc
 ir LSHIFT 1 -> jl
-x AND ai -> ak
 he RSHIFT 5 -> hh
 1 AND lu -> lv
 NOT ft -> fu
@@ -177,6 +176,7 @@ lf RSHIFT 5 -> li
 x RSHIFT 3 -> z
 b RSHIFT 3 -> e
 he RSHIFT 2 -> hf
+x AND ai -> ak
 NOT fx -> fy
 jt AND jv -> jw
 hx OR hy -> hz
