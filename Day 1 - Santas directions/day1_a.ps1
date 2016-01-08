@@ -4,6 +4,8 @@ $input = '()(((()))(()()()((((()(((())(()(()((((((()(()(((())))((()(((()))((())(
 $up = ($input.ToCharArray() | Where-Object {$_ -eq '('} ).Count
 $down = ($input.ToCharArray() | Where-Object {$_ -eq ')'} ).Count
 
+$input.ToCharArray() | $a = (Where-Object {$_ -eq '('} ).Count | $b = Where-Object {$_ -eq ')'}).Count
+
 Write-Host("Up:" + $up)
 Write-Host("Down:" + $up)
 Write-Host("Final:" + ($up-$down))
