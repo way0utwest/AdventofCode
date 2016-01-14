@@ -21,8 +21,6 @@ select
  , endlength = charindex('x', dimensions) - 1
  , startwidth = charindex('x', substring(dimensions, charindex('x', dimensions),20)) + charindex('x', dimensions)
  , startheight = len(dimensions) - charindex('x', reverse(dimensions))  + 2
--- , c1 = charindex('x', dimensions)
--- , c2 = charindex('x', dimensions, charindex('x', dimensions)+1) - 
 from day2_wrappingpresents d
 )
 , cteDimensions
