@@ -19,6 +19,7 @@ $RECYCLE.BIN/
 
 #Pycharm
 .idea\workspace.xml
+.idea.workspace.xml
 
 # =========================
 # Operating System Files
