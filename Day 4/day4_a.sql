@@ -1,3 +1,4 @@
+-- Brute force MD5 calculation
 WITH    cteCalc ( n )
           AS (
                SELECT n = ROW_NUMBER() OVER ( ORDER BY (
