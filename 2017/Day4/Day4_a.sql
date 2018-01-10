@@ -1,0 +1,14 @@
+--CREATE TABLE Day4
+--(
+--    passphrase VARCHAR(100)
+--)
+--GO
+--INSERT dbo.Day4
+--(
+--    passphrase
+--)
+--VALUES
+--   ('aa bb cc dd ee' )
+-- , ('aa bb cc dd aa')
+-- , ('aa bb cc dd aaa')
+GO
