@@ -1,5 +1,10 @@
+USE AdventofCode
+GO
 /*
 -- testing setup
+drop table Day2
+go
+
 CREATE TABLE Day2
 ( datavalue varchar(100))
 GO
@@ -15,23 +20,7 @@ FROM 'E:\Documents\git\AdventofCode\2020\Day2\Day2_data.txt' WITH ( ROWTERMINATO
 GO
 SELECT * FROM day2
 GO
-ALTER TABLE day2 ADD lowerbound tinyint, upperbound tinyint
-ALTER TABLE day2 ADD letter CHAR(1), pwd VARCHAR(50)
-GO
-SELECT
-   datavalue
- , CHARINDEX(':', datavalue)
- , CHARINDEX(' ', datavalue)
- , lowerbound, upperbound, letter, pwd
- FROM dbo.Day2 
- go
--- load data 
-UPDATE day2
- SET lowerbound = SUBSTRING(datavalue, 1, CHARINDEX('-', datavalue)-1)
-   , upperbound = SUBSTRING(datavalue, CHARINDEX('-', datavalue)+1, CHARINDEX(' ', datavalue)-CHARINDEX('-', datavalue)-1)
-   , letter = SUBSTRING(datavalue, CHARINDEX(' ', datavalue)+1, 1)
-   , pwd = SUBSTRING(datavalue, CHARINDEX(':', datavalue)+2, 50)
-GO
+
 
 /*************************************************************************************************
                                                                                             
@@ -54,22 +43,23 @@ PPPPPPPPPP          aaaaaaaaaa  aaaarrrrrrr                      ttttttttttt    
 
 **************************************************************************************************/
 
-WITH cteSolution
-AS
-(
-SELECT letter, 
-pwd
-, LEN(d.pwd) - LEN( REPLACE(pwd, d.letter, '')) AS occ
-, CASE WHEN LEN(d.pwd) - LEN( REPLACE(pwd, d.letter, '')) >= d.lowerbound
-    AND LEN(d.pwd) - LEN( REPLACE(pwd, d.letter, '')) <= d.upperbound
-	then 1
-	ELSE 0
-	END AS valid
- FROM dbo.Day2 AS d
- )
- SELECT * FROM cteSolution
- WHERE valid=1
- GO
+WITH cteData (lowerbound, upperbound, letter, pwd)
+AS (   SELECT
+            SUBSTRING(datavalue, 1, CHARINDEX('-', datavalue) - 1), SUBSTRING(datavalue, CHARINDEX('-', datavalue) + 1, CHARINDEX(' ', datavalue) - CHARINDEX('-', datavalue) - 1), SUBSTRING(datavalue, CHARINDEX(' ', datavalue) + 1, 1), SUBSTRING(datavalue, CHARINDEX(':', datavalue) + 2, 50)
+       FROM dbo.Day2 AS d)
+   , cteSolution (occ, valid)
+AS (   SELECT
+            LEN(d.pwd) - LEN(REPLACE(pwd, d.letter, '')) AS occ
+          , CASE
+                WHEN LEN(d.pwd) - LEN(REPLACE(pwd, d.letter, '')) >= d.lowerbound
+                     AND LEN(d.pwd) - LEN(REPLACE(pwd, d.letter, '')) <= d.upperbound THEN
+                    1
+                ELSE
+                    0
+            END AS valid
+       FROM cteData AS d)
+SELECT COUNT(*) FROM cteSolution WHERE valid = 1;
+GO
 
  
 
@@ -94,8 +84,15 @@ PPPPPPPPPP          aaaaaaaaaa  aaaarrrrrrr                      ttttttttttt    
 */
 
 
-WITH cteSolution
-AS (   SELECT
+WITH cteData (lowerbound, upperbound, letter, pwd)
+AS (   SELECT 
+            CAST( SUBSTRING(datavalue, 1, CHARINDEX('-', datavalue) - 1) AS TINYINT)
+		  , CAST( SUBSTRING(datavalue, CHARINDEX('-', datavalue) + 1, CHARINDEX(' ', datavalue) - CHARINDEX('-', datavalue) - 1) AS TINYINT)
+		  , SUBSTRING(datavalue, CHARINDEX(' ', datavalue) + 1, 1)
+		  , SUBSTRING(datavalue, CHARINDEX(':', datavalue) + 2, 50)
+       FROM dbo.Day2 AS d)
+   , cteSolution (firstvalid, secondvalid)
+AS (   SELECT 
             CASE
                 WHEN SUBSTRING(pwd, d.lowerbound, 1) = d.letter THEN
                     1
@@ -108,16 +105,10 @@ AS (   SELECT
                 ELSE
                     0
             END AS secondvalid
-       FROM dbo.Day2 AS d)
+       FROM cteData AS d)
 SELECT COUNT(*)
 FROM   cteSolution
 WHERE  cteSolution.firstvalid + cteSolution.secondvalid = 1;
-
-
-
-
-
-
 
 
 
