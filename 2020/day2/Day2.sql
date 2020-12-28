@@ -1,5 +1,6 @@
-USE AdventofCode
+USE AdventofCode;
 GO
+
 /*
 -- testing setup
 drop table Day2
@@ -12,15 +13,19 @@ go
 select * from Day2
 */
 -- setup
-TRUNCATE TABLE dbo.Day2
-GO
-BULK INSERT dbo.Day2 
-FROM 'E:\Documents\git\AdventofCode\2020\Day2\Day2_data.txt' WITH ( ROWTERMINATOR = '\n',ERRORFILE = 'E:\Documents\git\AdventofCode\2020\Day2\myRubbishData.log' )
 
-GO
-SELECT * FROM day2
+TRUNCATE TABLE dbo.Day2;
 GO
 
+BULK INSERT dbo.Day2
+FROM 'E:\Documents\git\AdventofCode\2020\Day2\Day2_data.txt'
+WITH
+    (ROWTERMINATOR = '\n'
+   , ERRORFILE = 'E:\Documents\git\AdventofCode\2020\Day2\myRubbishData.log');
+GO
+
+SELECT * FROM day2;
+GO
 
 /*************************************************************************************************
                                                                                             
@@ -45,7 +50,10 @@ PPPPPPPPPP          aaaaaaaaaa  aaaarrrrrrr                      ttttttttttt    
 
 WITH cteData (lowerbound, upperbound, letter, pwd)
 AS (   SELECT
-            SUBSTRING(datavalue, 1, CHARINDEX('-', datavalue) - 1), SUBSTRING(datavalue, CHARINDEX('-', datavalue) + 1, CHARINDEX(' ', datavalue) - CHARINDEX('-', datavalue) - 1), SUBSTRING(datavalue, CHARINDEX(' ', datavalue) + 1, 1), SUBSTRING(datavalue, CHARINDEX(':', datavalue) + 2, 50)
+            SUBSTRING(datavalue, 1, CHARINDEX('-', datavalue) - 1) AS lowerbound
+          , SUBSTRING(datavalue, CHARINDEX('-', datavalue) + 1, CHARINDEX(' ', datavalue) - CHARINDEX('-', datavalue) - 1) AS upperbound
+          , SUBSTRING(datavalue, CHARINDEX(' ', datavalue) + 1, 1)
+          , SUBSTRING(datavalue, CHARINDEX(':', datavalue) + 2, 50)
        FROM dbo.Day2 AS d)
    , cteSolution (occ, valid)
 AS (   SELECT
@@ -60,9 +68,6 @@ AS (   SELECT
        FROM cteData AS d)
 SELECT COUNT(*) FROM cteSolution WHERE valid = 1;
 GO
-
- 
-
 
 /*
 PPPPPPPPPPPPPPPPP                                               tttt                222222222222222    
@@ -83,16 +88,15 @@ P::::::::P         a::::::::::aa:::ar:::::r                    tt:::::::::::tt  
 PPPPPPPPPP          aaaaaaaaaa  aaaarrrrrrr                      ttttttttttt       22222222222222222222
 */
 
-
 WITH cteData (lowerbound, upperbound, letter, pwd)
-AS (   SELECT 
-            CAST( SUBSTRING(datavalue, 1, CHARINDEX('-', datavalue) - 1) AS TINYINT)
-		  , CAST( SUBSTRING(datavalue, CHARINDEX('-', datavalue) + 1, CHARINDEX(' ', datavalue) - CHARINDEX('-', datavalue) - 1) AS TINYINT)
-		  , SUBSTRING(datavalue, CHARINDEX(' ', datavalue) + 1, 1)
-		  , SUBSTRING(datavalue, CHARINDEX(':', datavalue) + 2, 50)
+AS (   SELECT
+            CAST(SUBSTRING(datavalue, 1, CHARINDEX('-', datavalue) - 1) AS TINYINT)
+          , CAST(SUBSTRING(datavalue, CHARINDEX('-', datavalue) + 1, CHARINDEX(' ', datavalue) - CHARINDEX('-', datavalue) - 1) AS TINYINT)
+          , SUBSTRING(datavalue, CHARINDEX(' ', datavalue) + 1, 1)
+          , SUBSTRING(datavalue, CHARINDEX(':', datavalue) + 2, 50)
        FROM dbo.Day2 AS d)
    , cteSolution (firstvalid, secondvalid)
-AS (   SELECT 
+AS (   SELECT
             CASE
                 WHEN SUBSTRING(pwd, d.lowerbound, 1) = d.letter THEN
                     1
@@ -110,10 +114,6 @@ SELECT COUNT(*)
 FROM   cteSolution
 WHERE  cteSolution.firstvalid + cteSolution.secondvalid = 1;
 
-
-
 /*
 drop table Day2
 */
-
-
