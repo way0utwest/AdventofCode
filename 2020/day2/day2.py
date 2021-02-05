@@ -35,3 +35,4 @@ for i in expensereports:
                 print(productofthree)
                 stop = 1
                 break
+
