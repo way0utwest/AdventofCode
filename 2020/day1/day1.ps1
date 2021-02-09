@@ -1,6 +1,5 @@
 # 2020 Advent of Code
-# Part 1 - The Expense reports
-
+# Day 1 - PoSh solution
 
 # PPPPPPPPPPPPPPPPP                                               tttt                 1111111   
 # P::::::::::::::::P                                           ttt:::t                1::::::1   
@@ -18,25 +17,30 @@
 # P::::::::P        a:::::aaaa::::::a r:::::r                  tt::::::::::::::t     1::::::::::1
 # P::::::::P         a::::::::::aa:::ar:::::r                    tt:::::::::::tt     1::::::::::1
 # PPPPPPPPPP          aaaaaaaaaa  aaaarrrrrrr                      ttttttttttt       111111111111   
+$dataFile = '2020\Day1\day1_data.txt'
 
-file_handle = open('2020\day1\day1_data.txt', 'r')
-expensereports = file_handle.readlines()
-file_handle.close
-#expensereports = (1721,979,366,299,675,1456)
-print("Part 1")
-print("=============")
-stop = 0
-for i in expensereports:
-    for j in expensereports:
-        sumoftwo = int(i) + int(j)
-        #print(i, " + ", j, " = ", sumoftwo)
-        if sumoftwo == 2020:
-            print("The two numbers are: ", i, " and ", j)
-            print("product:",int(i)*int(j))
-            stop = 1
-            break
-    if stop == 1:
-        break
+$datarows = Get-Content $dataFile
+write-host("Part 1")
+$part1 = 0
+$i = 0
+$j = 0
+foreach ($line in $datarows) {
+    foreach ($line2 in $datarows) {
+        $i = ($line/1)
+        $j = ($line2/1)
+        $sum = $i + $j
+        #write-host("$i + $j = $sum")
+        if ($sum -eq 2020) {
+            write-host("The numbers are $i and $j")
+            $part1 = $i * $j
+          Break 
+        }
+        if ($part1 -gt 0) {break}
+    }
+}
+
+write-host("part 1: $($part1)")
+
 
 # PPPPPPPPPPPPPPPPP                                               tttt                222222222222222    
 # P::::::::::::::::P                                           ttt:::t               2:::::::::::::::22  
@@ -54,20 +58,27 @@ for i in expensereports:
 # P::::::::P        a:::::aaaa::::::a r:::::r                  tt::::::::::::::t     2::::::2222222:::::2
 # P::::::::P         a::::::::::aa:::ar:::::r                    tt:::::::::::tt     2::::::::::::::::::2
 # PPPPPPPPPP          aaaaaaaaaa  aaaarrrrrrr                      ttttttttttt       22222222222222222222
-stop = 0
-print("Part 2")
-print("=============")
-for i in expensereports:
-    if stop == 1:
-        break
-    for j in expensereports:
-        if stop == 1:
-            break
-        for k in expensereports:
-            sumofthree = int(i) + int(j) + int(k)
-            if sumofthree == 2020:
-                productofthree = int(i) * int(j) * int(k)
-                print("The three numbers are: ", i, " and ", j, " and ", k)
-                print(productofthree)
-                stop = 1
-                break
+
+$part2 = 0
+$i = 0
+$j = 0
+foreach ($line in $datarows) {
+    foreach ($line2 in $datarows) {
+        foreach ($line3 in $datarows) {
+            $i = ($line/1)
+            $j = ($line2/1)
+            $k = ($line3/1)
+            $sum = $i + $j + $k
+            #write-host("$i + $j = $sum")
+            if ($sum -eq 2020) {
+                write-host("The numbers are $i and $j and $k")
+                $part2 = $i * $j * $k
+                Break 
+            }
+        if ($part2 -gt 0) {break}
+        }
+    if ($part2 -gt 0) {break}
+    }
+}
+
+write-host("part 2: $($part2)")
