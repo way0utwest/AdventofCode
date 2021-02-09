@@ -1,38 +1,22 @@
-# Part 1
-file_handle = open('2020\day2\day2_data.txt', 'r')
-expensereports = file_handle.readlines()
-file_handle.close
-#expensereports = (1721,979,366,299,675,1456)
-print("Part 1")
-print("=============")
-stop = 0
-for i in expensereports:
-    for j in expensereports:
-        sumoftwo = int(i) + int(j)
-        #print(i, " + ", j, " = ", sumoftwo)
-        if sumoftwo == 2020:
-            print("The two numbers are: ", i, " and ", j)
-            print("product:",int(i)*int(j))
-            stop = 1
-            break
-    if stop == 1:
-        break
+# Day 2
+dataFile = "2020\day2\day2_data.txt"
 
-stop = 0
-print("Part 2")
-print("=============")
-for i in expensereports:
-    if stop == 1:
-        break
-    for j in expensereports:
-        if stop == 1:
-            break
-        for k in expensereports:
-            sumofthree = int(i) + int(j) + int(k)
-            if sumofthree == 2020:
-                productofthree = int(i) * int(j) * int(k)
-                print("The three numbers are: ", i, " and ", j, " and ", k)
-                print(productofthree)
-                stop = 1
-                break
+fileHandle = open(dataFile, 'r')
+lines = fileHandle.readlines()
 
+valid = 0
+valid2 = 0
+for line in lines:
+    # print(line)
+    min, max = line.split(' ')[0].split('-')
+    pwd = line.split(' ')[2]
+    checkval = line.split(' ')[1][:-1]
+    print("pwd ", pwd, " min:", min, " max:", max)
+    if int(min) <= pwd.count(checkval) <= int(max):
+        valid += 1
+    if (pwd[int(min)-1] == checkval) != (pwd[int(max)-1] == checkval):
+        valid2 += 1
+
+print("part 1 total:", valid)
+print("part 2 total:", valid2)
+# 564
