@@ -97,6 +97,27 @@
 --   FROM cteLen l
 --;
 --GO
+/*************************************************************************************************
+                                                                                            
+PPPPPPPPPPPPPPPPP                                               tttt                 1111111   
+P::::::::::::::::P                                           ttt:::t                1::::::1   
+P::::::PPPPPP:::::P                                          t:::::t               1:::::::1   
+PP:::::P     P:::::P                                         t:::::t               111:::::1   
+  P::::P     P:::::Paaaaaaaaaaaaa  rrrrr   rrrrrrrrr   ttttttt:::::ttttttt            1::::1   
+  P::::P     P:::::Pa::::::::::::a r::::rrr:::::::::r  t:::::::::::::::::t            1::::1   
+  P::::PPPPPP:::::P aaaaaaaaa:::::ar:::::::::::::::::r t:::::::::::::::::t            1::::1   
+  P:::::::::::::PP           a::::arr::::::rrrrr::::::rtttttt:::::::tttttt            1::::l   
+  P::::PPPPPPPPP      aaaaaaa:::::a r:::::r     r:::::r      t:::::t                  1::::l   
+  P::::P            aa::::::::::::a r:::::r     rrrrrrr      t:::::t                  1::::l   
+  P::::P           a::::aaaa::::::a r:::::r                  t:::::t                  1::::l   
+  P::::P          a::::a    a:::::a r:::::r                  t:::::t    tttttt        1::::l   
+PP::::::PP        a::::a    a:::::a r:::::r                  t::::::tttt:::::t     111::::::111
+P::::::::P        a:::::aaaa::::::a r:::::r                  tt::::::::::::::t     1::::::::::1
+P::::::::P         a::::::::::aa:::ar:::::r                    tt:::::::::::tt     1::::::::::1
+PPPPPPPPPP          aaaaaaaaaa  aaaarrrrrrr                      ttttttttttt       111111111111             
+
+**************************************************************************************************/
+/*
 WITH myCTE
 AS
 (
@@ -115,3 +136,91 @@ SELECT myCTE.PassportKey, myCTE.Item
   FROM itemcte
   GROUP BY itemcte.PassportKey
   HAVING COUNT(*) = 7
+*/
+
+
+/*
+PPPPPPPPPPPPPPPPP                                               tttt                222222222222222    
+P::::::::::::::::P                                           ttt:::t               2:::::::::::::::22  
+P::::::PPPPPP:::::P                                          t:::::t               2::::::222222:::::2 
+PP:::::P     P:::::P                                         t:::::t               2222222     2:::::2 
+  P::::P     P:::::Paaaaaaaaaaaaa  rrrrr   rrrrrrrrr   ttttttt:::::ttttttt                     2:::::2 
+  P::::P     P:::::Pa::::::::::::a r::::rrr:::::::::r  t:::::::::::::::::t                     2:::::2 
+  P::::PPPPPP:::::P aaaaaaaaa:::::ar:::::::::::::::::r t:::::::::::::::::t                  2222::::2  
+  P:::::::::::::PP           a::::arr::::::rrrrr::::::rtttttt:::::::tttttt             22222::::::22   
+  P::::PPPPPPPPP      aaaaaaa:::::a r:::::r     r:::::r      t:::::t                 22::::::::222     
+  P::::P            aa::::::::::::a r:::::r     rrrrrrr      t:::::t                2:::::22222        
+  P::::P           a::::aaaa::::::a r:::::r                  t:::::t               2:::::2             
+  P::::P          a::::a    a:::::a r:::::r                  t:::::t    tttttt     2:::::2             
+PP::::::PP        a::::a    a:::::a r:::::r                  t::::::tttt:::::t     2:::::2       222222
+P::::::::P        a:::::aaaa::::::a r:::::r                  tt::::::::::::::t     2::::::2222222:::::2
+P::::::::P         a::::::::::aa:::ar:::::r                    tt:::::::::::tt     2::::::::::::::::::2
+PPPPPPPPPP          aaaaaaaaaa  aaaarrrrrrr                      ttttttttttt       22222222222222222222
+*/
+
+--WITH myCTE
+--AS
+--(
+-- SELECT  d.PassportKey, d.PassportVal, split.ItemNumber, Item = split.Item
+--   FROM dbo.Day4_Passport d
+--  CROSS APPLY dbo.DelimitedSplit8k(d.PassportVal,' ') split
+--)
+--SELECT myCTE.PassportKey, item
+--  FROM mycte
+-- WHERE item <> ''  
+
+
+WITH myCTE
+AS
+(
+ SELECT  d.PassportKey, d.PassportVal, split.ItemNumber, Item = split.Item
+   FROM dbo.Day4_Passport d
+  CROSS APPLY dbo.DelimitedSplit8k(d.PassportVal,' ') split
+)
+, splitCTE
+AS
+(SELECT myCTE.PassportKey, item, SUBSTRING(item, 1, 3) AS cat, SUBSTRING(item, 5, LEN(item) - 4) AS catval
+  FROM mycte
+ WHERE item <> '' AND item <> 'CID' 
+ )
+ SELECT top 10
+  splitCTE.PassportKey, splitCTE.Item, splitCTE.cat, splitCTE.catval
+  FROM splitCTE
+  
+
+ /*
+
+ 
+ , cteIyr (pKey)
+ AS
+ (SELECT dil.PassportKey
+ FROM dbo.Day4_ItemList AS dil
+ INNER JOIN cteByr ON cteByr.pKey = dil.PassportKey
+ WHERE SUBSTRING(Item, 1, 3) = 'iyr'
+ AND SUBSTRING(Item, 5, 4) >= 2010
+ AND SUBSTRING(Item, 5, 4) <= 2020
+ )
+ , cteEyr (pKey)
+ AS
+ (SELECT dil.PassportKey
+ FROM dbo.Day4_ItemList AS dil
+ INNER JOIN cteIyr r ON r.pKey = dil.PassportKey
+ WHERE SUBSTRING(Item, 1, 3) = 'eyr'
+ AND SUBSTRING(Item, 5, 4) >= 2020
+ AND SUBSTRING(Item, 5, 4) <= 2030
+ )
+ , cteHgt (pKey)
+ AS
+ (SELECT dil.PassportKey
+ FROM dbo.Day4_ItemList AS dil
+ INNER JOIN cteEyr r ON r.pKey = dil.PassportKey
+ WHERE SUBSTRING(Item, 1, 3) = 'hgt'
+ AND (SUBSTRING(Item, 5, 4) >= 2020 
+      AND SUBSTRING(REVERSE(item), 1, 2) = 'ni' 
+	  AND SUBSTRING(item, 5, CHARINDEX('in', item) - 6) >= 59
+	  AND SUBSTRING(item, 5, CHARINDEX('in', item) - 6) <= 76
+-- OR (SUBSTRING(Item, 5, 4) <= 2030)
+ )
+ )
+ SELECT * FROM cteHgt
+ */
