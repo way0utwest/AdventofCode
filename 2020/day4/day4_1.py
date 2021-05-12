@@ -12,7 +12,7 @@ for row in passports:
         currdict = dict(x.split(":") for x in currpassport.split(" ") if x)
         if len(currdict) == 8:
             part1 += 1
-        if (len(currdict) == 7) and ("cid" not in currdict):
+        if ((len(currdict) == 7) and ("cid" not in currdict)):
             part1 += 1
         currpassport = ""
 

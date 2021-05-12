@@ -1,28 +1,28 @@
 /*
-DROP TABLE Day5
+DROP TABLE Day6
 GO
-CREATE TABLE Day5
+CREATE TABLE Day6
 (   SeatCode VARCHAR(10)
 );
 GO
---TRUNCATE TABLE dbo.Day5
+--TRUNCATE TABLE dbo.Day6
 --GO
-BULK INSERT dbo.Day5
-FROM 'E:\Documents\git\AdventofCode\2020\Day5\Day5_data.txt' WITH ( ROWTERMINATOR = '\n',ERRORFILE = 'E:\Documents\git\AdventofCode\2020\Day5\myRubbishData.log' )
+BULK INSERT dbo.Day6
+FROM 'E:\Documents\git\AdventofCode\2020\Day6\Day6_data.txt' WITH ( ROWTERMINATOR = '\n',ERRORFILE = 'E:\Documents\git\AdventofCode\2020\Day6\myRubbishData.log' )
 GO
-SELECT * FROM day5
+SELECT * FROM Day6
 GO
 -- change to binary
-UPDATE dbo.Day5
+UPDATE dbo.Day6
  SET SeatCode = REPLACE(SeatCode, 'F',0)
-UPDATE dbo.Day5
+UPDATE dbo.Day6
  SET SeatCode = REPLACE(SeatCode, 'B',1)
-UPDATE dbo.Day5
+UPDATE dbo.Day6
  SET SeatCode = REPLACE(SeatCode, 'L',0)
-UPDATE dbo.Day5
+UPDATE dbo.Day6
  SET SeatCode = REPLACE(SeatCode, 'R',1)
 GO
-SELECT * FROM day5
+SELECT * FROM Day6
 GO
 */
 
@@ -60,7 +60,7 @@ AS
   (SUBSTRING(d.SeatCode, 8, 1) * 4	)  +
   (SUBSTRING(d.SeatCode, 9, 1) * 2	)  +
   (SUBSTRING(d.SeatCode, 10, 1) * 1	)  AS seat
- FROM dbo.Day5 AS d
+ FROM dbo.Day6 AS d
  --ORDER BY row desc
  )
  SELECT (row * 8)+seat AS seatID
@@ -105,7 +105,7 @@ AS
     (SUBSTRING(d.SeatCode, 8, 1) * 4	)  +
     (SUBSTRING(d.SeatCode, 9, 1) * 2	)  +
     (SUBSTRING(d.SeatCode, 10, 1) * 1	)  AS seatid
- FROM dbo.Day5 AS d
+ FROM dbo.Day6 AS d
  ), cteValues (SeatID, diff)
 AS
 (
