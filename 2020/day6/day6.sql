@@ -1,31 +1,61 @@
 /*
 DROP TABLE Day6
 GO
-CREATE TABLE Day6
-(   SeatCode VARCHAR(10)
-);
+CREATE TABLE Day6 
+(LineKey INT NOT NULL IDENTITY(1,1) CONSTRAINT Day6PK PRIMARY KEY
+, LineVal VARCHAR(100)
+)
 GO
---TRUNCATE TABLE dbo.Day6
---GO
-BULK INSERT dbo.Day6
+TRUNCATE TABLE dbo.Day6
+GO
+CREATE VIEW Day6_Load
+AS
+SELECT dgo.LineVal
+ FROM dbo.Day6 AS dgo
+go
+BULK INSERT dbo.Day6_Load
 FROM 'E:\Documents\git\AdventofCode\2020\Day6\Day6_data.txt' WITH ( ROWTERMINATOR = '\n',ERRORFILE = 'E:\Documents\git\AdventofCode\2020\Day6\myRubbishData.log' )
 GO
 SELECT * FROM Day6
 GO
--- change to binary
-UPDATE dbo.Day6
- SET SeatCode = REPLACE(SeatCode, 'F',0)
-UPDATE dbo.Day6
- SET SeatCode = REPLACE(SeatCode, 'B',1)
-UPDATE dbo.Day6
- SET SeatCode = REPLACE(SeatCode, 'L',0)
-UPDATE dbo.Day6
- SET SeatCode = REPLACE(SeatCode, 'R',1)
+
+
+CREATE TABLE Day6_Groups
+( GroupKey INT NOT NULL IDENTITY(1,1) CONSTRAINT Day6GroupPK PRIMARY KEY
+, groupanswers VARCHAR(1000)
+)
 GO
-SELECT * FROM Day6
+
+DECLARE pcurs CURSOR FOR SELECT lineval FROM Day6 ORDER BY linekey;
+DECLARE
+    @val VARCHAR(1000) = ''
+  , @groups VARCHAR(1000);
+OPEN pcurs;
+FETCH NEXT FROM pcurs
+INTO @val;
+SET @groups = '';
+WHILE @@FETCH_STATUS = 0
+BEGIN
+    IF @val > ''
+        SELECT @groups += ' ' + @val;
+    ELSE
+    BEGIN
+        INSERT dbo.Day6_Groups (groupanswers) VALUES (@groups);
+        SET @groups = '';
+    END;
+    FETCH NEXT FROM pcurs
+    INTO @val;
+END;
+    INSERT dbo.Day6_Groups(groupanswers) VALUES (@groups);
+DEALLOCATE pcurs;
+GO
+UPDATE dbo.Day6_Groups
+ SET groupanswers = REPLACE(groupanswers, ' ', '')
+GO
+ 
+SELECT * FROM Day6_Groups;
 GO
 */
-
 /*************************************************************************************************
                                                                                             
 PPPPPPPPPPPPPPPPP                                               tttt                 1111111   
@@ -46,26 +76,19 @@ P::::::::P         a::::::::::aa:::ar:::::r                    tt:::::::::::tt  
 PPPPPPPPPP          aaaaaaaaaa  aaaarrrrrrr                      ttttttttttt       111111111111             
 
 **************************************************************************************************/
--- get the seatID
-WITH cteAirplane( ROW, seat)
-AS
-(SELECT 
-  (SUBSTRING(d.SeatCode, 1, 1) * 64) +
-  (SUBSTRING(d.SeatCode, 2, 1) * 32 ) +
-  (SUBSTRING(d.SeatCode, 3, 1) * 16 ) +
-  (SUBSTRING(d.SeatCode, 4, 1) * 8 ) +
-  (SUBSTRING(d.SeatCode, 5, 1) * 4	) +
-  (SUBSTRING(d.SeatCode, 6, 1) * 2	) +
-  (SUBSTRING(d.SeatCode, 7, 1) * 1	) AS row,
-  (SUBSTRING(d.SeatCode, 8, 1) * 4	)  +
-  (SUBSTRING(d.SeatCode, 9, 1) * 2	)  +
-  (SUBSTRING(d.SeatCode, 10, 1) * 1	)  AS seat
- FROM dbo.Day6 AS d
- --ORDER BY row desc
- )
- SELECT (row * 8)+seat AS seatID
- FROM cteAirplane
- ORDER BY seatID DESC
+-- Need to total the unique answers
+-- string split each row and get distinct values.
+/*
+ALTER TABLE dbo.Day6_Groups ADD deduppedanswers VARCHAR(500)
+go
+-- Use the dedup function for strings to remove duplicates
+UPDATE dbo.Day6_Groups
+ SET deduppedanswers =  DBO.REMOVE_DUPLICATE_INSTR(1,groupanswers)
+GO
+*/
+-- sum the length of the de-duped answers
+SELECT SUM(LEN(dg.deduppedanswers)) FROM dbo.Day6_Groups AS dg
+
 
 
 /*
@@ -86,32 +109,90 @@ P::::::::P        a:::::aaaa::::::a r:::::r                  tt::::::::::::::t  
 P::::::::P         a::::::::::aa:::ar:::::r                    tt:::::::::::tt     2::::::::::::::::::2
 PPPPPPPPPP          aaaaaaaaaa  aaaarrrrrrr                      ttttttttttt       22222222222222222222
 */
--- Find the gap
 
-;WITH cteAirplane( seatid)
-AS
-(SELECT 
-  (
-   (
-    (SUBSTRING(d.SeatCode, 1, 1) * 64) +
-    (SUBSTRING(d.SeatCode, 2, 1) * 32 ) +
-    (SUBSTRING(d.SeatCode, 3, 1) * 16 ) +
-    (SUBSTRING(d.SeatCode, 4, 1) * 8 ) +
-    (SUBSTRING(d.SeatCode, 5, 1) * 4	) +
-    (SUBSTRING(d.SeatCode, 6, 1) * 2	) +
-    (SUBSTRING(d.SeatCode, 7, 1) * 1	)
-   ) * 8
-   ) +
-    (SUBSTRING(d.SeatCode, 8, 1) * 4	)  +
-    (SUBSTRING(d.SeatCode, 9, 1) * 2	)  +
-    (SUBSTRING(d.SeatCode, 10, 1) * 1	)  AS seatid
- FROM dbo.Day6 AS d
- ), cteValues (SeatID, diff)
+
+/*
+-- We now need to find duplicates, so we reload data, separating each group by a comma.
+CREATE TABLE Day6_Part2
+( groupid INT NOT NULL IDENTITY CONSTRAINT Day62PK PRIMARY KEY
+, Groupanswers VARCHAR(500)
+)
+DECLARE pcurs CURSOR FOR SELECT lineval FROM Day6 ORDER BY linekey;
+DECLARE
+    @val VARCHAR(1000) = ''
+  , @groups VARCHAR(1000);
+OPEN pcurs;
+FETCH NEXT FROM pcurs
+INTO @val;
+SET @groups = '';
+WHILE @@FETCH_STATUS = 0
+BEGIN
+    IF @val > ''
+        SELECT @groups += ',' + @val;
+    ELSE
+    BEGIN
+        INSERT dbo.Day6_Part2 (groupanswers) VALUES (@groups);
+        SET @groups = '';
+    END;
+    FETCH NEXT FROM pcurs
+    INTO @val;
+END;
+    INSERT dbo.Day6_Part2(groupanswers) VALUES (@groups);
+DEALLOCATE pcurs;
+
+GO
+UPDATE dbo.Day6_Part2
+ SET Groupanswers = SUBSTRING(Groupanswers, 2, LEN(Groupanswers))
+GO
+*/
+;WITH cteGroups (groupid, item)
 AS
 (
-SELECT seatid, SeatID - LAG(SeatID,1) OVER (ORDER BY SeatID) AS diff
-FROM cteAirplane
-) 
-SELECT *
- FROM cteValues
- WHERE diff > 1
+SELECT dp.groupid, dsk.Item FROM dbo.Day6_Part2 AS dp
+  CROSS APPLY dbo.DelimitedSplit8K(dp.Groupanswers, ',') AS dsk
+)
+SELECT cteGroups.item
+, LAG(cteGroups.item, 1, NULL) OVER (PARTITION BY cteGroups.groupid ORDER BY item)
+, cteGroups.groupid
+ FROM cteGroups
+
+, cteStrings (string1, string2, groupid)
+AS
+( SELECT cteGroups.item
+, LAG(cteGroups.item, 1, NULL) OVER (PARTITION BY cteGroups.groupid ORDER BY item)
+, cteGroups.groupid
+ FROM cteGroups
+ )
+, cteResult( groupid, string1, string2, result)
+AS (
+select groupid
+	, String1
+    , String2
+    , Result = sum(CharCount)
+from
+(
+    select s.string1
+        , String2
+        , Charcount = max(case when CHARINDEX(substring(String2, t.N, 1), String1, 0) > 0 then 1 else 0 end)
+		, groupid
+    from cteStrings AS s
+    join cteTally t on t.N <= len(String2)
+	WHERE string2 IS NOT null
+    group by groupid
+	    , String1
+        , String2
+        , substring(String2, t.N, 1)
+) x
+group by groupid
+		, String1
+        , String2
+)
+, cteMin (groupid, minvalue)
+AS (
+SELECT groupid, MIN(result) 
+ FROM cteResult
+ GROUP BY groupid
+ )
+ SELECT SUM(minvalue)
+  FROM cteMin
+
