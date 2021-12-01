@@ -151,10 +151,10 @@ AS
 SELECT dp.groupid, dsk.Item FROM dbo.Day6_Part2 AS dp
   CROSS APPLY dbo.DelimitedSplit8K(dp.Groupanswers, ',') AS dsk
 )
-SELECT cteGroups.item
-, LAG(cteGroups.item, 1, NULL) OVER (PARTITION BY cteGroups.groupid ORDER BY item)
-, cteGroups.groupid
- FROM cteGroups
+--SELECT cteGroups.item
+--, LAG(cteGroups.item, 1, NULL) OVER (PARTITION BY cteGroups.groupid ORDER BY item)
+--, cteGroups.groupid
+-- FROM cteGroups
 
 , cteStrings (string1, string2, groupid)
 AS
