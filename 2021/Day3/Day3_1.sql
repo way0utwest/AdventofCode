@@ -1,6 +1,9 @@
 /*
+drop table if exists [2021].Day3
+go
+
 CREATE TABLE [2021].Day3
-( DiagnosticBit CHAR(s.cnt))
+( DiagnosticBit CHAR(12))
 GO
 INSERT [2021].Day3
 (
@@ -20,6 +23,10 @@ VALUES
 ('00010 '),
 ('01010')
 GO
+
+BULK INSERT [2021].Day3 FROM 'E:\Documents\git\AdventofCode\2021\Day3\input.txt' WITH ( ROWTERMINATOR = '\n',ERRORFILE = 'E:\Documents\git\AdventofCode\2021\day3\myRubbishData.log' )
+
+
 */
 WITH cteBits (a, b, c, d, e, f, g, h)
 AS (SELECT CAST(SUBSTRING(DiagnosticBit, 1, 1) AS TINYINT) AS a,
